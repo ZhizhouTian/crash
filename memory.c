@@ -4557,6 +4557,7 @@ get_task_mem_usage(ulong task, struct task_mem_usage *tm)
 		 */ 
 		if (VALID_MEMBER(mm_struct_rss_stat)) {
 			long anonpages, filepages;
+			int page;
 
 			anonpages = tt->anonpages;
 			filepages = tt->filepages;
@@ -4568,6 +4569,27 @@ get_task_mem_usage(ulong task, struct task_mem_usage *tm)
 				OFFSET(mm_struct_rss_stat) +
 				OFFSET(mm_rss_stat_count) +
 				(anonpages * sizeof(long)));
+
+			tm->mm_addr = tc->mm_struct;
+
+			readmem(tc->mm_struct + OFFSET(mm_struct_rss_stat) + sizeof(int),
+				KVADDR,
+				&page,
+				sizeof(int),
+				"task_struct mm_struct rss_stat MM_ANONPAGES",
+				RETURN_ON_ERROR);
+
+			tm->anonpages = page;
+
+			readmem(tc->mm_struct + OFFSET(mm_struct_rss_stat) + sizeof(int) * 2,
+				KVADDR,
+				&page,
+				sizeof(int),
+				"task_struct mm_struct rss_stat MM_ANONPAGES",
+				RETURN_ON_ERROR);
+
+			tm->swappages = page;
+
 		}
 
 		/* Check whether SPLIT_RSS_COUNTING is enabled */

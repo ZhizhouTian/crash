@@ -4555,6 +4555,9 @@ struct task_mem_usage {
         double pct_physmem;
         ulong mm_struct_addr;
 	ulong pgd_addr;
+	ulong anonpages;
+	ulong swappages;
+	ulong mm_addr;
 };
 
 /*
