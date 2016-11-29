@@ -4592,6 +4592,19 @@ get_task_mem_usage(ulong task, struct task_mem_usage *tm)
 
 		}
 
+		if (VALID_MEMBER(task_struct_signal)) {
+			short oom_score_adj;
+			unsigned long signal_struct =
+				ULONG(tt->task_struct + OFFSET(task_struct_signal));
+			readmem(signal_struct + 1108,
+				KVADDR,
+				&oom_score_adj,
+				sizeof(short),
+				"signal_struct oom_score_adj",
+				RETURN_ON_ERROR);
+			tm->adj = oom_score_adj;
+		}
+
 		/* Check whether SPLIT_RSS_COUNTING is enabled */
 		if (VALID_MEMBER(task_struct_rss_stat)) {
 			int sync_rss;

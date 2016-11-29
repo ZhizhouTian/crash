@@ -3227,6 +3227,7 @@ show_ps_data(ulong flag, struct task_context *tc, struct psinfo *psi)
 	fprintf(fp, "%7ld ", (tm->total_vm * PAGESIZE())/1024);
 	fprintf(fp, "%6ld  ", (tm->rss * PAGESIZE())/1024);
 	fprintf(fp, "%8ld  ", (tm->anonpages* PAGESIZE())/1024);
+	fprintf(fp, "%8d  ", tm->adj);
 	fprintf(fp, "%8ld  ", (tm->swappages* PAGESIZE())/1024);
 	fprintf(fp, "%8x   ", tm->mm_addr);
 	if (is_kernel_thread(tc->task))
@@ -3245,7 +3246,8 @@ show_ps(ulong flag, struct psinfo *psi)
 
 	if (!(flag & (PS_EXCLUSIVE|PS_NO_HEADER))) 
 		fprintf(fp, 
-		    "   PID    PPID  CPU %s  ST  %%MEM     VSZ    RSS      ANON      SWAP        MM      COMM\n",
+		    "   PID    PPID  CPU %s  ST  %%MEM     VSZ    RSS"
+		    "      ANON      ADJ      SWAP        MM      COMM\n",
 			flag & PS_KSTACKP ?
 			mkstring(buf, VADDR_PRLEN, CENTER|RJUST, "KSTACKP") :
 			mkstring(buf, VADDR_PRLEN, CENTER, "TASK"));

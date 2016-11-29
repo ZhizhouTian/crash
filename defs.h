@@ -4556,6 +4556,7 @@ struct task_mem_usage {
         ulong mm_struct_addr;
 	ulong pgd_addr;
 	ulong anonpages;
+	short adj;
 	ulong swappages;
 	ulong mm_addr;
 };
